@@ -1,0 +1,47 @@
+body {
+    max-width: 1260px;
+  }
+  .form__container {
+    margin: 0 auto;
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 700px;
+  }
+  
+  input {
+    border: none;
+    border-bottom: 1px solid gray;
+  }
+  
+  .form__cep-container {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .form__cidade-uf-container {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .form__btn-check {
+    background: transparent;
+    border: 1px solid gray;
+    color: gray;
+    padding: 5px 10px;
+  }
+  
+  .form-btn-container {
+    padding-top: 70px;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .form__btn-submit {
+    width: 120px;
+    background: transparent;
+    border: 1px solid gray;
+    color: gray;
+    padding: 5px 10px;
+  }

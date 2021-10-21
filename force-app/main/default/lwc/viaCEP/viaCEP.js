@@ -1,75 +1,65 @@
-import { LightningElement, track} from 'lwc';
-
-// importing apex class to make callout
-import getCurrencyData from '@salesforce/apex/IntegracaoViaCEP.getCEP';
-
-export default class IntegracaoViaCEP extends LightningElement {
-    @track Rua;
-    @track Bairro;
-    @track Cidade;
-    @track Estado;
-    @track CEP;
-
-    limpa_formulário_cep() {
-        //Limpa valores do formulário de cep.
-         this.Rua ="";
-         this.Bairro ="";
-         this.Cidade ="";
-         this.Estado ="";
-    }
-    limpa_formulário_cep(conteudo) {
-    if (!("erro" in conteudo)) {
-        //Atualiza os campos com os valores.
-        this.Rua=(conteudo.logradouro);
-        this.Bairro=(conteudo.bairro);
-        this.Cidade=(conteudo.localidade);
-        this.Estado=(conteudo.uf);
-    } //end if.
-    else {
-        //CEP não Encontrado.
-        limpa_formulário_cep();
-        alert("CEP não encontrado.");
-    }
-}
-    
-     pesquisacep(valor) {
-
-    //Nova variável "cep" somente com dígitos.
-    var cep = valor.replace(/\D/g, '');
-
-    //Verifica se campo cep possui valor informado.
+async function validarCepNaApi(cep) {
+    const resposta = await fetch(
+      `https://viacep.com.br/ws/${cep}/json/?callback=`
+    );
+    const dados = await resposta.json();
+    return dados;
+  }
+  
+  async function pegarCep() {
+    let cep = document.querySelector("#cep").value;
+  
+    cep = cep.replace(/\D/g, "");
+  
+    console.log("cep: ", cep);
+  
     if (cep != "") {
-
-        //Expressão regular para validar o CEP.
-        var validacep = /^[0-9]{8}$/;
-
-        //Valida o formato do CEP.
-        if(validacep.test(cep)) {
-
-            //Preenche os campos com "..." enquanto consulta webservice.
-            this.Rua="...";
-            this.Bairro="...";
-            this.Cidade="...";
-            this.Estado="...";
-
-            //Cria um elemento javascript.
-            var script = document.createElement('script');
-
-            //Sincroniza com o callback.
-            script.src = 'https://viacep.com.br/ws/'+ cep + '/json/?callback=meu_callback';
-
-            //Insere script no documento e carrega o conteúdo.
-            document.body.appendChild(script);
-
-        } //end if.
-        else {
-            //cep é inválido.
-            limpa_formulário_cep();
-            alert("Formato de CEP inválido.");
+      console.log("cep com valor");
+      let validaCep = /^[0-9]{8}$/;
+      if (validaCep.test(cep)) {
+        console.log("cep validado com sucesso");
+        const valoresDosCampos = await validarCepNaApi(cep);
+        console.log(valoresDosCampos);
+        if (!("erro" in valoresDosCampos)) {
+          document.querySelector("#rua").value = valoresDosCampos.logradouro;
+          document.querySelector("#bairro").value = valoresDosCampos.bairro;
+          document.querySelector("#cidade").value = valoresDosCampos.localidade;
+          document.querySelector("#estado").value = valoresDosCampos.uf;
+        } else {
+          console.log("cep em formato errado");
+          limparFormularioCep();
+          alert("CEP não encontrado.");
         }
-    } //end if.
-    else {
-        //cep sem valor, limpa formulário.
-        limpa_formulário_cep();
+      }
+    } else {
+      console.log("cep sem valor, por favor o preencha");
+      limparFormularioCep();
     }
-};
+  }
+  
+  function limparFormularioCep() {
+    document.querySelector("#cep").value = "";
+    document.querySelector("#rua").value = "";
+    document.querySelector("#bairro").value = "";
+    document.querySelector("#cidade").value = "";
+    document.querySelector("#estado").value = "";
+  }
+  
+  function inserirEndereco() {
+    const cep = document.querySelector("#cep").value;
+    const rua = document.querySelector("#rua").value;
+    const bairro = document.querySelector("#bairro").value;
+    const cidade = document.querySelector("#cidade").value;
+    const estado = document.querySelector("#estado").value;
+  
+    const enderecoDeEntrega = {
+      cep,
+      rua,
+      bairro,
+      cidade,
+      estado,
+    };
+    console.log(enderecoDeEntrega);
+  
+    return enderecoDeEntrega;
+  }

@@ -1,11 +1,26 @@
 <template>
-    <div>
-        <div>Informe o CEP: {cep}</div>
-        <div>Rua: {rua}</div>
-        <div>Bairro: {bairro}</div>
-        <div>Complemento: {complemento}</div>
-        <div>Cidade: {cidade}</div>
-        <div>Estado: {estado}</div>        
-    </div>  
-    
+    <!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+  <script src="index.js"></script>
+  <title>Salesforce</title>
+</head>
+<body>
+  <form class="form__container">
+    <section class="form__cep-container"> <label>cep:<input type="text" name="cep" id="cep"></label>
+      <button class="form__btn-check" type="button" onclick="pegarCep()">Consultar</button></section>
+   <section> <label>Logradouro:<input type="text" name="rua" id="rua"></label></section>
+   <section> <label>Bairro:<input type="text" name="bairro" id="bairro"></label></section>
+     <section class="form__cidade-uf-container"> <label>cidade:<input type="text" name="cidade" id="cidade"></label>    
+      <label>UF:<input type="text" name="estado" id="estado"></label></section>
+   <section> class="form-btn-container">
+      <button class="form__btn-submit" type="button" onclick="inserirEndereco()">Inserir Endereço</button>
+    </section>
+    </form>
+</body>
+</html>
 </template>
